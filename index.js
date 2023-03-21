@@ -37,8 +37,8 @@ class ProductManager {
   };
 }
 
-const manejarProducts = new ProductManager();
-manejarProducts.addProduct(
+const manageProducts = new ProductManager();
+manageProducts.addProduct(
   "Camisa blanca",
   "Camisa blanca liviana para este calor insoportable",
   50,
@@ -46,7 +46,7 @@ manejarProducts.addProduct(
   "osiadfher129348",
   34
 );
-manejarProducts.addProduct(
+manageProducts.addProduct(
   "Camisa Negra",
   "Camisa negra y gruesa para el frío que se viene por fin",
   60,
@@ -54,7 +54,7 @@ manejarProducts.addProduct(
   "sdpgoj152",
   45
 );
-manejarProducts.addProduct(
+manageProducts.addProduct(
   "Campera de invierno",
   "Campera muy cálida y cómoda ideal para el invierno",
   80,
@@ -62,7 +62,7 @@ manejarProducts.addProduct(
   "ewltgaknm1234",
   29
 );
-manejarProducts.addProduct(
+manageProducts.addProduct(
   "Pantalon de Jean",
   "Pantalon de Jean fachero facherito",
   70,
@@ -71,5 +71,5 @@ manejarProducts.addProduct(
   54
 );
 
-console.log(manejarProducts.getProducts());
-console.log(manejarProducts.getProductById(3));
+console.log(manageProducts.getProducts());
+console.log(manageProducts.getProductById(3));
