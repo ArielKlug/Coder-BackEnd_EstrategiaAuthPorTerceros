@@ -8,6 +8,8 @@ class ProductManager {
     return this.products;
   };
   addProduct = (title, description, price, thumbnail, code, stock) => {
+
+    
     const product = {
       title,
       description,
@@ -21,7 +23,11 @@ class ProductManager {
     } else {
       product.id = this.products[this.products.length - 1].id + 1;
     }
-    this.products.push(product);
+    const codeCheck = this.products.find(item => item.code === code);
+    if(!codeCheck){
+      this.products.push(product);
+    }else{console.log(`ERROR: Ya existe un producto con ese código. Código: ${code}`)}
+    
   };
 
   getProductById = (idProduct) => {
@@ -61,6 +67,22 @@ manageProducts.addProduct(
   "https://e7.pngegg.com/pngimages/669/222/png-clipart-jacket-coat-parka-winter-clothing-jacket-winter-fashion-thumbnail.png",
   "ewltgaknm1234",
   29
+);
+manageProducts.addProduct(
+  "Campera de invierno",
+  "Campera muy cálida y cómoda ideal para el invierno",
+  80,
+  "https://e7.pngegg.com/pngimages/669/222/png-clipart-jacket-coat-parka-winter-clothing-jacket-winter-fashion-thumbnail.png",
+  "ewltgaknm1234",
+  29
+);
+manageProducts.addProduct(
+  "Pantalon de Jean",
+  "Pantalon de Jean fachero facherito",
+  70,
+  "https://w7.pngwing.com/pngs/717/825/png-transparent-jeans-denim-blue-slim-fit-pants-diesel-men-jeans-blue-color-black-thumbnail.png",
+  "asdj12490812094sad",
+  54
 );
 manageProducts.addProduct(
   "Pantalon de Jean",
