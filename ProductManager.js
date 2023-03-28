@@ -1,23 +1,26 @@
 const { promises } = require("fs");
 const fs = promises;
+
 class ProductManager {
   #margenGanancia = 0.3;
   constructor(path) {
     this.products = [];
     this.path = path;
-    this.loadProducts();
+    this.createFile();
+    
   }
 
+  createFile = async () => {
+    await fs.writeFile(this.path, [], "utf-8");
+  };
   loadProducts = async () => {
-    setTimeout(async () => {
-      try {
-        const data = await fs.readFile(this.path, "utf-8");
-        this.products = JSON.parse(data);
-      } catch (err) {
-        console.log(err);
-        this.products = [];
-      }
-    }, 1);
+    try {
+      const data = await fs.readFile(this.path, "utf-8");
+      this.products = JSON.parse(data);
+    } catch (err) {
+      console.log(err);
+      this.products = [];
+    }
   };
 
   saveProducts = async () => {
@@ -29,12 +32,15 @@ class ProductManager {
     }
   };
 
-  getProducts = () => { 
+  getProducts =  () => {
+    
     if (this.loadProducts) {
       return this.products;
-    } else {
+    }else {
       console.log("error al cargar los productos");
     }
+     
+     
   };
 
   addProduct = async (title, description, price, thumbnail, code, stock) => {
@@ -67,7 +73,6 @@ class ProductManager {
   };
 
   getProductById = (idProduct) => {
-    
     const findProduct = this.products.find((e) => e.id === idProduct);
     if (!findProduct) {
       console.error("El producto que buscas, lamentablemente no existe");
@@ -79,26 +84,38 @@ class ProductManager {
       );
     }
   };
-  updateProduct(id, updatedFields) {
-    const index = this.products.findIndex(product => product.id === id);
+  updateProduct = async (id, updatedFields) => {
+    const products = await this.getProducts();
+    const index = products.findIndex((product) => product.id === id);
     const existingProduct = this.products[index];
     const updatedProduct = { ...existingProduct, ...updatedFields };
     this.products[index] = updatedProduct;
-    this.saveProducts()
-  }
-  async deleteProduct(id) {
-    const index = this.products.findIndex(product => product.id === id);
-    if (index !== -1) {
-      // eliminar el producto encontrado en el índice
-      this.products = [
-        ...this.products.slice(0, index),
-        ...this.products.slice(index + 1)
-      ];
+    this.saveProducts();
+  };
   
-      this.saveProducts()
+   deleteProduct = async (id) => {
+    try {
+      
+      const data = await fs.readFile('./data.json');
+      const productos = JSON.parse(data);
+  
+      
+      const index = productos.findIndex(producto => producto.id === id);
+  
+      
+      if (index !== -1) {
+        
+        productos.splice(index, 1);
+  
+        
+        const newData = JSON.stringify(productos, null, 2);
+        await fs.writeFile('./data.json', newData);
+      }
+    } catch (err) {
+      console.log(`Error al eliminar el producto: ${err}`);
     }
-  }
-  
+    
+   };
 }
 
 const manageProducts = new ProductManager("./data.json");
@@ -110,14 +127,15 @@ manageProducts.addProduct(
   "osiadfher129348",
   34
 );
-manageProducts.updateProduct(1,{title:"Camisa NEGRA",
-  description:"Camisa blanca liviana para este calor insoportable",
-  price:50,
-  thumbnail:"https://w7.pngwing.com/pngs/196/897/png-transparent-two-white-t-shirts-clothes-clothing-t-shirt-thumbnail.png",
-  code:"osiadfher12934asfads8",
-  stock:34}
-  
-);
+//  manageProducts.updateProduct(1, {
+//    title: "Camisa NEGRA",
+//    description: "Camisa blanca liviana para este calor insoportable",
+//    price: 50,
+//    thumbnail:
+//      "https://w7.pngwing.com/pngs/196/897/png-transparent-two-white-t-shirts-clothes-clothing-t-shirt-thumbnail.png",
+//   code: "osiadfher12934asfads8",
+//    stock: 34,
+//  });
 manageProducts.addProduct(
   "Camisa azul",
   "Camisa blanca liviana para este calor insoportable",
@@ -126,8 +144,18 @@ manageProducts.addProduct(
   "osiadfheafs129348",
   34
 );
+manageProducts.addProduct(
+  "Camisa roja",
+  "Camisa blanca liviana para este calor insoportable",
+  50,
+  "https://w7.pngwing.com/pngs/196/897/png-transparent-two-white-t-shirts-clothes-clothing-t-shirt-thumbnail.png",
+  "osiadfheaasdasdfs129348",
+  34
+);
 
-console.log(manageProducts.getProducts());
-//  console.log(manageProducts.getProductById(1));
- console.log(manageProducts.deleteProduct(2))
  console.log(manageProducts.getProducts());
+//  console.log(manageProducts.getProductById(1));
+ manageProducts.deleteProduct(1);
+ console.log(manageProducts.getProducts());
+// let lista = manageProducts.getProducts()
+// console.log(lista);
