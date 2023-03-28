@@ -7,7 +7,6 @@ class ProductManager {
     this.products = [];
     this.path = path;
     this.createFile();
-    
   }
 
   createFile = async () => {
@@ -33,14 +32,13 @@ class ProductManager {
   };
 
   getProducts =  () => {
-    
+    this.loadProducts()
     if (this.loadProducts) {
       return this.products;
-    }else {
+      
+    } else {
       console.log("error al cargar los productos");
     }
-     
-     
   };
 
   addProduct = async (title, description, price, thumbnail, code, stock) => {
@@ -85,37 +83,41 @@ class ProductManager {
     }
   };
   updateProduct = async (id, updatedFields) => {
-    const products = await this.getProducts();
-    const index = products.findIndex((product) => product.id === id);
-    const existingProduct = this.products[index];
-    const updatedProduct = { ...existingProduct, ...updatedFields };
-    this.products[index] = updatedProduct;
-    this.saveProducts();
-  };
-  
-   deleteProduct = async (id) => {
     try {
-      
-      const data = await fs.readFile('./data.json');
+      const data = await fs.readFile(this.path, 'utf-8'); 
       const productos = JSON.parse(data);
-  
+
+      const index = productos.findIndex((producto) => producto.id === id);
       
-      const index = productos.findIndex(producto => producto.id === id);
-  
       
+        const existingProduct = this.products[index];
+        const updatedProduct = { ...existingProduct, ...updatedFields };
+        this.products[index] = updatedProduct;
+        
+        await fs.writeFile(this.path, JSON.stringify(this.products, null, 2), 'utf-8')
+      
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  deleteProduct = async (id) => {
+    try {
+      const data = await fs.readFile(this.path);
+      const productos = JSON.parse(data);
+
+      const index = productos.findIndex((producto) => producto.id === id);
+
       if (index !== -1) {
-        
         productos.splice(index, 1);
-  
-        
+
         const newData = JSON.stringify(productos, null, 2);
-        await fs.writeFile('./data.json', newData);
+        await fs.writeFile(this.path, newData);
       }
     } catch (err) {
       console.log(`Error al eliminar el producto: ${err}`);
     }
-    
-   };
+  };
 }
 
 const manageProducts = new ProductManager("./data.json");
@@ -127,15 +129,8 @@ manageProducts.addProduct(
   "osiadfher129348",
   34
 );
-//  manageProducts.updateProduct(1, {
-//    title: "Camisa NEGRA",
-//    description: "Camisa blanca liviana para este calor insoportable",
-//    price: 50,
-//    thumbnail:
-//      "https://w7.pngwing.com/pngs/196/897/png-transparent-two-white-t-shirts-clothes-clothing-t-shirt-thumbnail.png",
-//   code: "osiadfher12934asfads8",
-//    stock: 34,
-//  });
+
+
 manageProducts.addProduct(
   "Camisa azul",
   "Camisa blanca liviana para este calor insoportable",
@@ -144,6 +139,7 @@ manageProducts.addProduct(
   "osiadfheafs129348",
   34
 );
+
 manageProducts.addProduct(
   "Camisa roja",
   "Camisa blanca liviana para este calor insoportable",
@@ -153,9 +149,14 @@ manageProducts.addProduct(
   34
 );
 
- console.log(manageProducts.getProducts());
-//  console.log(manageProducts.getProductById(1));
- manageProducts.deleteProduct(1);
- console.log(manageProducts.getProducts());
-// let lista = manageProducts.getProducts()
-// console.log(lista);
+
+manageProducts.updateProduct(1, {
+  title: "Camisa NEGRA",
+  description: "Camisa blanca liviana para este calor insoportable",
+  price: 53,
+  thumbnail:
+    "https://w7.pngwing.com/pngs/196/897/png-transparent-two-white-t-shirts-clothes-clothing-t-shirt-thumbnail.png",
+  code: "osiadfher12934asfads8",
+  stock: 3151234,
+});
+console.log(manageProducts.getProducts())
