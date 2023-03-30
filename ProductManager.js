@@ -10,15 +10,18 @@ class ProductManager {
   }
 
   createFile = async () => {
-    await fs.writeFile(this.path, [], "utf-8");
+    try {
+      await fs.writeFile(this.path, [], "utf-8");
+    } catch (err) {
+      console.log(err);
+    }
   };
   loadProducts = async () => {
     try {
-      const data = await fs.readFile(this.path, "utf-8");
-      this.products = JSON.parse(data);
+      const parsedData = await fs.readFile(this.path, "utf-8");
+      this.products = JSON.parse(parsedData);
     } catch (err) {
       console.log(err);
-      this.products = [];
     }
   };
 
@@ -31,12 +34,11 @@ class ProductManager {
     }
   };
 
-  getProducts =  () => {
-    this.loadProducts()
-    if (this.loadProducts) {
-      return this.products;
-      
-    } else {
+  getProducts = async () => {
+    try {
+      await this.loadProducts();
+      return console.log(this.products);
+    } catch (error) {
       console.log("error al cargar los productos");
     }
   };
@@ -84,17 +86,19 @@ class ProductManager {
   };
   updateProduct = async (id, updatedFields) => {
     try {
-      const data = await fs.readFile(this.path, 'utf-8'); 
-      const productos = JSON.parse(data);
+      
+      const index = this.products.findIndex((producto) => producto.id === id);
+      
+if (index != -1) {
+  const existingProduct = this.products[index];
+      const updatedProduct = { ...existingProduct, ...updatedFields };
+      this.products[index] = updatedProduct;
 
-      const index = productos.findIndex((producto) => producto.id === id);
-      
-      
-        const existingProduct = this.products[index];
-        const updatedProduct = { ...existingProduct, ...updatedFields };
-        this.products[index] = updatedProduct;
-        
-        await fs.writeFile(this.path, JSON.stringify(this.products, null, 2), 'utf-8')
+      await this.saveProducts();
+} else {
+
+  console.log('Error, el producto a actualizar no esiste')
+}
       
     } catch (error) {
       console.log(error);
@@ -103,16 +107,11 @@ class ProductManager {
 
   deleteProduct = async (id) => {
     try {
-      const data = await fs.readFile(this.path);
-      const productos = JSON.parse(data);
-
-      const index = productos.findIndex((producto) => producto.id === id);
+      const index = this.products.findIndex((producto) => producto.id === id);
 
       if (index !== -1) {
         productos.splice(index, 1);
-
-        const newData = JSON.stringify(productos, null, 2);
-        await fs.writeFile(this.path, newData);
+        await this.saveProducts();
       }
     } catch (err) {
       console.log(`Error al eliminar el producto: ${err}`);
@@ -129,7 +128,6 @@ manageProducts.addProduct(
   "osiadfher129348",
   34
 );
-
 
 manageProducts.addProduct(
   "Camisa azul",
@@ -149,8 +147,7 @@ manageProducts.addProduct(
   34
 );
 
-
-manageProducts.updateProduct(1, {
+manageProducts.updateProduct(2, {
   title: "Camisa NEGRA",
   description: "Camisa blanca liviana para este calor insoportable",
   price: 53,
@@ -159,4 +156,4 @@ manageProducts.updateProduct(1, {
   code: "osiadfher12934asfads8",
   stock: 3151234,
 });
-console.log(manageProducts.getProducts())
+manageProducts.getProducts();
