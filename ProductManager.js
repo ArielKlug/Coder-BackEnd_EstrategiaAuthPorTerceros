@@ -1,25 +1,34 @@
 const { promises } = require("fs");
 const fs = promises;
-
+const fsSync = require("fs");
 class ProductManager {
   #margenGanancia = 0.3;
   constructor(path) {
     this.products = [];
     this.path = path;
     this.createFile();
+    this.loadProducts();
   }
 
   createFile = async () => {
     try {
-      await fs.writeFile(this.path, [], "utf-8");
+      if (!fsSync.existsSync(this.path)) {
+        await fs.writeFile(this.path, "{}", "utf-8");
+      }
     } catch (err) {
       console.log(err);
     }
   };
   loadProducts = async () => {
     try {
-      const parsedData = await fs.readFile(this.path, "utf-8");
-      this.products = JSON.parse(parsedData);
+      await this.createFile();
+      let data = await fs.readFile(this.path, "utf-8");
+
+      if (data.length > 0) {
+        const parsedData = JSON.parse(data);
+
+        this.products = parsedData;
+      }
     } catch (err) {
       console.log(err);
     }
@@ -37,14 +46,15 @@ class ProductManager {
   getProducts = async () => {
     try {
       await this.loadProducts();
-      return console.log(this.products);
-    } catch (error) {
-      console.log("error al cargar los productos");
+      console.log(this.products);
+    } catch (err) {
+      console.log(err);
     }
   };
 
   addProduct = async (title, description, price, thumbnail, code, stock) => {
     try {
+      await this.loadProducts;
       const product = {
         title,
         description,
@@ -72,34 +82,38 @@ class ProductManager {
     }
   };
 
-  getProductById = (idProduct) => {
-    const findProduct = this.products.find((e) => e.id === idProduct);
-    if (!findProduct) {
-      console.error("El producto que buscas, lamentablemente no existe");
-      return;
-    } else {
-      console.log(
-        `El producto que buscas es: ${findProduct.title}, cuyo valor es de: $${findProduct.price}`,
-        findProduct
-      );
+  getProductById = async (idProduct) => {
+    try {
+      await this.loadProducts();
+      const findProduct = this.products.find((e) => e.id === idProduct);
+
+      if (!findProduct || findProduct === 0) {
+        console.error("El producto que buscas, lamentablemente no existe");
+        return;
+      } else {
+        console.log(
+          `El producto que buscas es: ${findProduct.title}, cuyo valor es de: $${findProduct.price}`,
+          findProduct
+        );
+      }
+    } catch (err) {
+      console.log(err);
     }
   };
   updateProduct = async (id, updatedFields) => {
     try {
-      
+      await this.loadProducts();
       const index = this.products.findIndex((producto) => producto.id === id);
-      
-if (index != -1) {
-  const existingProduct = this.products[index];
-      const updatedProduct = { ...existingProduct, ...updatedFields };
-      this.products[index] = updatedProduct;
 
-      await this.saveProducts();
-} else {
+      if (index != -1) {
+        const existingProduct = this.products[index];
+        const updatedProduct = { ...existingProduct, ...updatedFields };
+        this.products[index] = updatedProduct;
 
-  console.log('Error, el producto a actualizar no esiste')
-}
-      
+        await this.saveProducts();
+      } else {
+        console.log("Error, el producto a actualizar no esiste");
+      }
     } catch (error) {
       console.log(error);
     }
@@ -107,10 +121,10 @@ if (index != -1) {
 
   deleteProduct = async (id) => {
     try {
+      await this.loadProducts();
       const index = this.products.findIndex((producto) => producto.id === id);
-
-      if (index !== -1) {
-        productos.splice(index, 1);
+      if (index !== -1 && id !== null) {
+        this.products.splice(index, 1);
         await this.saveProducts();
       }
     } catch (err) {
@@ -120,40 +134,34 @@ if (index != -1) {
 }
 
 const manageProducts = new ProductManager("./data.json");
-manageProducts.addProduct(
-  "Camisa blanca",
-  "Camisa blanca liviana para este calor insoportable",
-  50,
-  "https://w7.pngwing.com/pngs/196/897/png-transparent-two-white-t-shirts-clothes-clothing-t-shirt-thumbnail.png",
-  "osiadfher129348",
-  34
-);
 
-manageProducts.addProduct(
-  "Camisa azul",
-  "Camisa blanca liviana para este calor insoportable",
-  50,
-  "https://w7.pngwing.com/pngs/196/897/png-transparent-two-white-t-shirts-clothes-clothing-t-shirt-thumbnail.png",
-  "osiadfheafs129348",
-  34
-);
+// manageProducts.addProduct(
+//   "Camisa blanca",
+//   "Camisa blanca liviana para este calor insoportable",
+//   65,
+//   "https://w7.pngwing.com/pngs/196/897/png-transparent-two-white-t-shirts-clothes-clothing-t-shirt-thumbnail.png",
+//   "osiadfher129348",
+//   34
+// );
+// manageProducts.addProduct(
+//   "Camisa NEGRA",
+//   "Camisa blanca liviana para este calor insoportable",
+//   6125,
+//   "https://w7.pngwing.com/pngs/196/897/png-transparent-two-white-t-shirts-clothes-clothing-t-shirt-thumbnail.png",
+//   "osiadfheasr129348",
+//   34
+// );
 
-manageProducts.addProduct(
-  "Camisa roja",
-  "Camisa blanca liviana para este calor insoportable",
-  50,
-  "https://w7.pngwing.com/pngs/196/897/png-transparent-two-white-t-shirts-clothes-clothing-t-shirt-thumbnail.png",
-  "osiadfheaasdasdfs129348",
-  34
-);
+// manageProducts.updateProduct(1, {
+//   title: "Camisa blanca",
+//   description: "Camisa blanca liviana para este calor insoportable",
+//   price: 655,
+//   thumbnail:
+//     "https://w7.pngwing.com/pngs/196/897/png-transparent-two-white-t-shirts-clothes-clothing-t-shirt-thumbnail.png",
+//   code: "osiaasdadfdfher129348",
+//   stock: 1243124,
+// });
 
-manageProducts.updateProduct(2, {
-  title: "Camisa NEGRA",
-  description: "Camisa blanca liviana para este calor insoportable",
-  price: 53,
-  thumbnail:
-    "https://w7.pngwing.com/pngs/196/897/png-transparent-two-white-t-shirts-clothes-clothing-t-shirt-thumbnail.png",
-  code: "osiadfher12934asfads8",
-  stock: 3151234,
-});
-manageProducts.getProducts();
+// manageProducts.deleteProduct(2);
+
+//   manageProducts.getProductById(1);
