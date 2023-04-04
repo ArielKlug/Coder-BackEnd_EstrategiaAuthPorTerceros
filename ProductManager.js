@@ -45,8 +45,8 @@ class ProductManager {
 
   getProducts = async () => {
     try {
-      await this.loadProducts();
-      console.log(this.products);
+      await this.loadProducts()
+      return this.products
     } catch (err) {
       console.log(err);
     }
@@ -82,19 +82,18 @@ class ProductManager {
     }
   };
 
-  getProductById = async (idProduct) => {
+  getProductById = async (pid) => {
     try {
       await this.loadProducts();
-      const findProduct = this.products.find((e) => e.id === idProduct);
+      const findProduct = this.products.find((e) => e.id === pid);
 
       if (!findProduct || findProduct === 0) {
         console.error("El producto que buscas, lamentablemente no existe");
         return;
       } else {
-        console.log(
-          `El producto que buscas es: ${findProduct.title}, cuyo valor es de: $${findProduct.price}`,
-          findProduct
-        );
+        return findProduct
+          
+        
       }
     } catch (err) {
       console.log(err);
@@ -133,35 +132,7 @@ class ProductManager {
   };
 }
 
-const manageProducts = new ProductManager("./data.json");
 
-// manageProducts.addProduct(
-//   "Camisa blanca",
-//   "Camisa blanca liviana para este calor insoportable",
-//   65,
-//   "https://w7.pngwing.com/pngs/196/897/png-transparent-two-white-t-shirts-clothes-clothing-t-shirt-thumbnail.png",
-//   "osiadfher129348",
-//   34
-// );
-// manageProducts.addProduct(
-//   "Camisa NEGRA",
-//   "Camisa blanca liviana para este calor insoportable",
-//   6125,
-//   "https://w7.pngwing.com/pngs/196/897/png-transparent-two-white-t-shirts-clothes-clothing-t-shirt-thumbnail.png",
-//   "osiadfheasr129348",
-//   34
-// );
 
-// manageProducts.updateProduct(1, {
-//   title: "Camisa blanca",
-//   description: "Camisa blanca liviana para este calor insoportable",
-//   price: 655,
-//   thumbnail:
-//     "https://w7.pngwing.com/pngs/196/897/png-transparent-two-white-t-shirts-clothes-clothing-t-shirt-thumbnail.png",
-//   code: "osiaasdadfdfher129348",
-//   stock: 1243124,
-// });
 
-// manageProducts.deleteProduct(2);
-
-//   manageProducts.getProductById(1);
+module.exports =  ProductManager;

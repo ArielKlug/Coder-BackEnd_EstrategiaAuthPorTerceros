@@ -1,0 +1,47 @@
+[
+  {
+    "title": "Camisa blanca",
+    "description": "Camisa blanca liviana para este calor insoportable",
+    "price": 84.5,
+    "thumbnail": "https://w7.pngwing.com/pngs/196/897/png-transparent-two-white-t-shirts-clothes-clothing-t-shirt-thumbnail.png",
+    "code": "osiadfher129348",
+    "stock": 34,
+    "id": 1
+  },
+  {
+    "title": "Camisa NEGRA",
+    "description": "Camisa blanca liviana para este calor insoportable",
+    "price": 7962.5,
+    "thumbnail": "https://w7.pngwing.com/pngs/196/897/png-transparent-two-white-t-shirts-clothes-clothing-t-shirt-thumbnail.png",
+    "code": "osiadfheasr129348",
+    "stock": 34,
+    "id": 2
+  },
+  {
+    "title": "Camisa roja",
+    "description": "Camisa blanca liviana para este calor insoportable",
+    "price": 7962.5,
+    "thumbnail": "https://w7.pngwing.com/pngs/196/897/png-transparent-two-white-t-shirts-clothes-clothing-t-shirt-thumbnail.png",
+    "code": "osiadfheasr12934asf8",
+    "stock": 34,
+    "id": 3
+  },
+  {
+    "title": "Camisa verde",
+    "description": "Camisa blanca liviana para este calor insoportable",
+    "price": 7962.5,
+    "thumbnail": "https://w7.pngwing.com/pngs/196/897/png-transparent-two-white-t-shirts-clothes-clothing-t-shirt-thumbnail.png",
+    "code": "osiadfheasr129sdfg348",
+    "stock": 34,
+    "id": 4
+  },
+  {
+    "title": "Camisa azul",
+    "description": "Camisa blanca liviana para este calor insoportable",
+    "price": 7962.5,
+    "thumbnail": "https://w7.pngwing.com/pngs/196/897/png-transparent-two-white-t-shirts-clothes-clothing-t-shirt-thumbnail.png",
+    "code": "osiadfheasdasr1293afssdg48",
+    "stock": 34,
+    "id": 5
+  }
+]
