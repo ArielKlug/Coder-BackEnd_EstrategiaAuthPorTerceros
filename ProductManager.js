@@ -104,7 +104,7 @@ class ProductManager {
       await this.loadProducts();
       const index = this.products.findIndex((producto) => producto.id === id);
 
-      if (index != -1) {
+      if (index !== -1) {
         const existingProduct = this.products[index];
         const updatedProduct = { ...existingProduct, ...updatedFields };
         this.products[index] = updatedProduct;
@@ -122,6 +122,7 @@ class ProductManager {
     try {
       await this.loadProducts();
       const index = this.products.findIndex((producto) => producto.id === id);
+     
       if (index !== -1 && id !== null) {
         this.products.splice(index, 1);
         await this.saveProducts();
