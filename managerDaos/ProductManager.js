@@ -28,6 +28,8 @@ class ProductManager {
         const parsedData = JSON.parse(data);
 
         this.products = parsedData;
+      } else {
+        this.products = [];
       }
     } catch (err) {
       console.log(err);
@@ -45,14 +47,23 @@ class ProductManager {
 
   getProducts = async () => {
     try {
-      await this.loadProducts()
-      return this.products
+      await this.loadProducts();
+      return this.products;
     } catch (err) {
       console.log(err);
     }
   };
 
-  addProduct = async (title, description, price, thumbnail, code, stock) => {
+  addProduct = async (
+    title,
+    description,
+    price,
+    thumbnail,
+    code,
+    stock,
+    category,
+    status
+  ) => {
     try {
       await this.loadProducts;
       const product = {
@@ -62,7 +73,10 @@ class ProductManager {
         thumbnail,
         code,
         stock,
+        category,
+        status,
       };
+
       if (this.products.length === 0) {
         product.id = 1;
       } else {
@@ -91,9 +105,7 @@ class ProductManager {
         console.error("El producto que buscas, lamentablemente no existe");
         return;
       } else {
-        return findProduct
-          
-        
+        return findProduct;
       }
     } catch (err) {
       console.log(err);
@@ -122,7 +134,7 @@ class ProductManager {
     try {
       await this.loadProducts();
       const index = this.products.findIndex((producto) => producto.id === id);
-     
+
       if (index !== -1 && id !== null) {
         this.products.splice(index, 1);
         await this.saveProducts();
@@ -133,7 +145,4 @@ class ProductManager {
   };
 }
 
-
-
-
-module.exports =  ProductManager;
+module.exports = ProductManager;

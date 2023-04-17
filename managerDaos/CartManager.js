@@ -6,7 +6,6 @@ class CartManager {
     this.products = [];
     this.path = path;
     this.createFile();
-    this.loadProducts();
   }
 
   createFile = async () => {
@@ -27,6 +26,8 @@ class CartManager {
         const parsedData = JSON.parse(data);
 
         this.products = parsedData;
+      } else {
+        this.products = [];
       }
     } catch (err) {
       console.log(err);
@@ -42,21 +43,27 @@ class CartManager {
     }
   };
 
-  getCarts = async (cid) => {
+  getCart = async (cid) => {
     try {
       await this.loadProducts();
       const index = this.products.findIndex((cart) => cart.id === cid);
-      const findCart = this.products[index]
-      const cartList = findCart.productsCart
+      const findCart = this.products[index];
+
+      const cartList = findCart.productsCart;
       return cartList;
     } catch (err) {
       console.log(err);
     }
   };
 
+  getCarts = async () => {
+    await this.loadProducts();
+    return this.products;
+  };
+
   addCart = async () => {
     try {
-      await this.loadProducts;
+      await this.loadProducts();
       const cart = {
         productsCart: [],
       };
@@ -75,23 +82,18 @@ class CartManager {
 
   addProduct = async (cid, pid) => {
     try {
-      await this.loadProducts;
+      await this.loadProducts();
       const index = this.products.findIndex((cart) => cart.id === cid);
-      const findCart = this.products[index]
+      const findCart = this.products[index];
       const product = {
         quantity: 2,
         id: pid,
       };
       findCart.productsCart.push(product);
-        this.saveProducts();
-            
-      
       this.saveProducts();
     } catch (err) {
       console.log(err);
     }
   };
-
-  
 }
 module.exports = CartManager;

@@ -1,6 +1,6 @@
 const { Router } = require("express");
-const ProductManager = require("../ProductManager");
-const products = new ProductManager("./data.json");
+const ProductManager = require("../managerDaos/ProductManager");
+const products = new ProductManager("./products.json");
 const router = Router();
 
 router.get("/", async (req, res) => {
@@ -49,20 +49,31 @@ router.post("/", async (req, res) => {
       !prod.thumbnail ||
       !prod.code ||
       !prod.stock ||
-      !prod.category
+      !prod.category ||
+      !prod.status
     ) {
       return res
         .status(400)
         .send({ status: "error", mensaje: "Todos los campos son necesarios" });
     } else {
-     await products.addProduct(
+      const codeCheck = products.products.find(
+        (item) => item.code === prod.code
+      );
+      if (codeCheck) {
+        return res.send({
+          status: "error",
+          mensaje: "Ya existe un producto con ese código",
+        });
+      }
+      await products.addProduct(
         prod.title,
         prod.description,
         prod.price,
         prod.thumbnail,
         prod.code,
         prod.stock,
-        prod.category
+        prod.category,
+        prod.status
       );
     }
 
@@ -90,7 +101,7 @@ router.put("/:pid", async (req, res) => {
         .status(400)
         .send({ status: "error", mensaje: "Todos los campos son necesarios" });
     } else {
-     await products.updateProduct(parseInt(pid), prod);
+      await products.updateProduct(parseInt(pid), prod);
     }
 
     res.status(200).send(await products.getProducts());
@@ -101,7 +112,7 @@ router.put("/:pid", async (req, res) => {
 
 router.delete("/:pid", async (req, res) => {
   const { pid } = req.params;
-await products.deleteProduct(parseInt(pid));
+  await products.deleteProduct(parseInt(pid));
   res.status(200).send(await products.getProducts());
 });
 

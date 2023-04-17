@@ -9,7 +9,7 @@ app.use(express.urlencoded({ extended: true }));
 
 app.use("/api/products", productRouter);
 
-app.use('/api/carrito', cartRouter)
+app.use('/api/carts', cartRouter)
 app.listen(8080, () => {
   console.log(`Server listening ${PORT}`);
 });
