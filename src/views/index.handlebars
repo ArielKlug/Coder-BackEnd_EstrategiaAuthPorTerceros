@@ -1,0 +1,13 @@
+<h1>
+    hola, {{user.name}} {{user.apellido}}, esto funca
+    y es {{#if isAd}}
+    <p>piola sos admin acá esta tu comida</p>
+    {{#each comida}}
+    <div>{{this.name}}</div>
+    <div>{{this.price}}</div>
+    {{/each}}
+{{else}}
+<p>f, sos user y no podes acceder</p>
+    {{/if}}
+</h1>
+<script src="/static/js/index.js"></script>
