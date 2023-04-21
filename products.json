@@ -9,5 +9,27 @@
     "category": "camisas",
     "status": true,
     "id": 1
+  },
+  {
+    "title": "Camisa roja",
+    "description": "Camisa blanca liviana para este calor insoportable",
+    "price": 10351.25,
+    "thumbnail": "s",
+    "code": "osiadfheasdasasfdr1293afssdg48",
+    "stock": 34,
+    "category": "camisas",
+    "status": true,
+    "id": 2
+  },
+  {
+    "title": "Camisa negra",
+    "description": "Camisa blanca liviana para este calor insoportable",
+    "price": 10351.25,
+    "thumbnail": "s",
+    "code": "osiyrerrayeadfheasdasr1293afssdg48",
+    "stock": 34,
+    "category": "camisas",
+    "status": true,
+    "id": 3
   }
 ]

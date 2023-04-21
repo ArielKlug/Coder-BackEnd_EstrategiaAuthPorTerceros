@@ -1,0 +1,15 @@
+<div>
+
+<ul id="lista">
+ {{#each productos}}
+ <li><p>{{this.title}}</p>
+    <p>Descripcion: {{this.description}}</p>
+    <p>Categoría: {{this.category}}</p>
+    <p>Precio: ${{this.price}}</p>
+   <p>Stock: {{this.stock}}</p>
+ </li>
+ {{/each}}
+</ul>
+
+</div>
+<script src="/static/js/index.js"></script>
