@@ -1,14 +1,8 @@
 <div>
-   <ul id="lista">
- {{#each productos}}
- <li><p>{{this.title}}</p>
-    <p>Descripcion: {{this.description}}</p>
-    <p>Categoría: {{this.category}}</p>
-    <p>Precio: ${{this.price}}</p>
-   <p>Stock: {{this.stock}}</p>
- </li>
- {{/each}}
-</ul>
+  <h1>Real time products</h1>
+  <ul id="productsList">
+    
+  </ul>
 </div>
 <script src="socket.io/socket.io.js"></script>
 <script src="/static/js/realTimeProducts.js"></script>

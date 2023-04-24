@@ -1,7 +1,7 @@
 const { promises } = require("fs");
 const fs = promises;
 const fsSync = require("fs");
-class ProductManager {
+class productManager {
   #margenGanancia = 0.3;
   constructor(path) {
     this.products = [];
@@ -145,4 +145,4 @@ class ProductManager {
   };
 }
 
-module.exports = ProductManager;
+module.exports = productManager;
