@@ -1,4 +1,4 @@
-const productManager = require("../managerDaos/ProductManager");
+const productManager = require("../managerDaos/files/ProductManager");
 const products = new productManager("./products.json");
 
 const socketProducts = async (io) => {
@@ -12,5 +12,5 @@ const socketProducts = async (io) => {
 };
 
 module.exports = {
-  socketProducts
+  socketProducts,
 };

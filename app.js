@@ -4,14 +4,14 @@ const productRouter = require("./src/routes/productsRouter");
 const cartRouter = require("./src/routes/cartRouter");
 const handleBars = require("express-handlebars");
 const viewsRouter = require("./src/routes/viewsRouter");
-
+const userRouter = require('./src/routes/messagesRouter')
 const { Server } = require("socket.io");
 const { socketProducts } = require("./src/utils/socketProducts");
 
 
+const dataBase = require('./src/config/objectConfig.js')
 
-
-
+dataBase.connectDB()
 const app = express();
 const PORT = 8080;
 
@@ -33,6 +33,8 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use("/static", express.static(__dirname + "/src/public"));
 app.use("/", viewsRouter);
+
+app.use('/users', userRouter)
 
 app.use("/api/products", productRouter);
 

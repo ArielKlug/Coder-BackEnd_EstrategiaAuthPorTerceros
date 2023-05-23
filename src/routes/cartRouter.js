@@ -1,11 +1,11 @@
 const { Router } = require("express");
-const CartManager = require("../managerDaos/CartManager");
-const carts = new CartManager("./carts.json");
+const cartManagerMongo = require("../managerDaos/mongo/cartManagerMongo");
+const carts = new cartManagerMongo;
 const router = Router();
 
 router.get("/:cid", async (req, res) => {
   const { cid } = req.params;
-  res.send(await carts.getCart(parseInt(cid)));
+  res.send(await carts.getCart(cid));
 });
 
 router.post("/", async (req, res) => {
@@ -20,8 +20,21 @@ router.get("/", async (req, res) => {
 router.post("/:cid/products/:pid", async (req, res) => {
   const { cid } = req.params;
   const { pid } = req.params;
-  await carts.addProduct(parseInt(cid), parseInt(pid));
-  res.send(await carts.getCart(parseInt(cid)));
+  await carts.addProduct(cid, pid);
+  res.send(await carts.getCart(cid));
 });
+
+router.delete("/:cid", async (req, res) => {
+  const { cid } = req.params;
+  await carts.deleteCart(cid);
+  res.status(200).send(await carts.getCarts());
+});
+
+router.delete("/:cid/products/:pid", async (req, res) => {
+  const { cid } = req.params;
+  const { pid } = req.params;
+  await carts.deleteProduct(cid, pid);
+  res.send(await carts.getCart(cid));
+})
 
 module.exports = router;

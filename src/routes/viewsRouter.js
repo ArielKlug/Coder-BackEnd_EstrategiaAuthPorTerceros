@@ -1,6 +1,6 @@
 const { Router } = require("express");
 const router = Router();
-const ProductManager = require("../managerDaos/ProductManager");
+const ProductManager = require("../managerDaos/files/ProductManager");
 
 const products = new ProductManager("./products.json");
 
@@ -21,6 +21,5 @@ router.get("/", async (req, res) => {
 router.get("/realTimeProducts", (req, res) => {
   res.render("realTimeProducts", {});
 });
-
 
 module.exports = router;

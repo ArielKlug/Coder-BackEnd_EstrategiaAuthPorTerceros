@@ -1,12 +1,13 @@
 const { Router } = require("express");
-const ProductManager = require("../managerDaos/ProductManager");
-const products = new ProductManager("./products.json");
+const { productModel } = require("../models/productModel");
+const products = require("../managerDaos/mongo/productManagerMongo");
+const productsManager = new products();
 const router = Router();
 
 router.get("/", async (req, res) => {
   try {
     const { limit } = req.query;
-    const productos = await products.getProducts();
+    const productos = await productsManager.getProducts();
     if (!limit) {
       return res.send({
         status: "success",
@@ -25,13 +26,13 @@ router.get("/", async (req, res) => {
 router.get("/:pid", async (req, res) => {
   try {
     const { pid } = req.params;
-    const productBI = await products.getProductById(parseInt(pid));
-    if (!productBI) {
+    const productById = await productsManager.getProductById(parseInt(pid));
+    if (!productById) {
       return res.send({ status: "error", error: "Product not found" });
     }
     res.send({
       status: "success",
-      payload: productBI,
+      payload: productById,
     });
   } catch (error) {
     console.log(error);
@@ -49,35 +50,16 @@ router.post("/", async (req, res) => {
       !prod.thumbnail ||
       !prod.code ||
       !prod.stock ||
-      !prod.category ||
-      !prod.status
+      !prod.category
     ) {
       return res
         .status(400)
         .send({ status: "error", mensaje: "Todos los campos son necesarios" });
     } else {
-      const codeCheck = products.products.find(
-        (item) => item.code === prod.code
-      );
-      if (codeCheck) {
-        return res.send({
-          status: "error",
-          mensaje: "Ya existe un producto con ese código",
-        });
-      }
-      await products.addProduct(
-        prod.title,
-        prod.description,
-        prod.price,
-        prod.thumbnail,
-        prod.code,
-        prod.stock,
-        prod.category,
-        prod.status
-      );
+      await productsManager.addProduct(prod);
     }
 
-    res.status(200).send(await products.getProducts());
+    res.status(200).send(await productModel.find());
   } catch (error) {
     console.log(error);
   }
@@ -86,25 +68,11 @@ router.post("/", async (req, res) => {
 router.put("/:pid", async (req, res) => {
   try {
     const { pid } = req.params;
-    const prod = req.body;
+    const prodToReplace = req.body;
 
-    if (
-      !prod.title ||
-      !prod.description ||
-      !prod.price ||
-      !prod.thumbnail ||
-      !prod.code ||
-      !prod.stock ||
-      !prod.category
-    ) {
-      return res
-        .status(400)
-        .send({ status: "error", mensaje: "Todos los campos son necesarios" });
-    } else {
-      await products.updateProduct(parseInt(pid), prod);
-    }
+    await productsManager.updateProduct(pid, prodToReplace);
 
-    res.status(200).send(await products.getProducts());
+    res.status(200).send(await productsManager.getProducts());
   } catch (error) {
     console.log(error);
   }
@@ -112,8 +80,8 @@ router.put("/:pid", async (req, res) => {
 
 router.delete("/:pid", async (req, res) => {
   const { pid } = req.params;
-  await products.deleteProduct(parseInt(pid));
-  res.status(200).send(await products.getProducts());
+  await productsManager.deleteProduct(pid);
+  res.status(200).send(await productsManager.getProducts());
 });
 
 module.exports = router;
