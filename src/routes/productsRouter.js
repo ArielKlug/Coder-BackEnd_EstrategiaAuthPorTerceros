@@ -1,5 +1,5 @@
 const { Router } = require("express");
-const { productModel } = require("../models/productModel");
+
 const products = require("../managerDaos/mongo/productManagerMongo");
 const productsManager = new products();
 const router = Router();
@@ -50,16 +50,17 @@ router.post("/", async (req, res) => {
       !prod.thumbnail ||
       !prod.code ||
       !prod.stock ||
-      !prod.category
+      !prod.category 
     ) {
       return res
         .status(400)
         .send({ status: "error", mensaje: "Todos los campos son necesarios" });
     } else {
       await productsManager.addProduct(prod);
+      
     }
 
-    res.status(200).send(await productModel.find());
+    res.status(200).send(await productsManager.getProducts());
   } catch (error) {
     console.log(error);
   }

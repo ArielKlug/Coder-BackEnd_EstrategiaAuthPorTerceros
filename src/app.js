@@ -1,15 +1,15 @@
 const express = require("express");
-const productRouter = require("./src/routes/productsRouter");
+const productRouter = require("./routes/productsRouter");
 
-const cartRouter = require("./src/routes/cartRouter");
+const cartRouter = require("./routes/cartRouter");
 const handleBars = require("express-handlebars");
-const viewsRouter = require("./src/routes/viewsRouter");
-const userRouter = require('./src/routes/messagesRouter')
+const viewsRouter = require("./routes/viewsRouter");
+const userRouter = require('./routes/messagesRouter')
 const { Server } = require("socket.io");
-const { socketProducts } = require("./src/utils/socketProducts");
+const { socketProducts } = require("./utils/socketProducts");
 
 
-const dataBase = require('./src/config/objectConfig.js')
+const dataBase = require('./config/objectConfig.js')
 
 dataBase.connectDB()
 const app = express();
@@ -26,12 +26,12 @@ const io = new Server(httpServer);
 socketProducts(io)
 
 app.engine("handlebars", handleBars.engine());
-app.set("views", __dirname + "/src/views");
+app.set("views", __dirname + "/views");
 app.set("view engine", "handlebars");
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use("/static", express.static(__dirname + "/src/public"));
+app.use("/static", express.static(__dirname + "/public"));
 app.use("/", viewsRouter);
 
 app.use('/users', userRouter)

@@ -1,8 +1,9 @@
 const { Router } = require("express");
 const router = Router();
-const ProductManager = require("../managerDaos/files/ProductManager");
 
-const products = new ProductManager("./products.json");
+const ProductManagerMongo = require("../managerDaos/mongo/productManagerMongo");
+
+const products = new ProductManagerMongo
 
 router.get("/", async (req, res) => {
   try {
@@ -21,5 +22,9 @@ router.get("/", async (req, res) => {
 router.get("/realTimeProducts", (req, res) => {
   res.render("realTimeProducts", {});
 });
+
+router.get("/chat", (req, res) =>{
+  res.render('chat', {})
+})
 
 module.exports = router;

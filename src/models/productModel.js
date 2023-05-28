@@ -16,7 +16,7 @@ const productSchema = new Schema({
     required: true,
   },
   stock: Number,
-  category: String,
+  category: String
 });
 const productModel = model(collection, productSchema);
 

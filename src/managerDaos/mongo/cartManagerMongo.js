@@ -11,8 +11,12 @@ class CartManagerMongo {
   };
 
   getCarts = async () => {
-    let carts = await cartModel.find();
+    try {
+      let carts = await cartModel.find();
     return carts;
+    } catch (error) {
+      console.log(error)
+    }
   };
   addCart = async () => {
     try {
@@ -47,7 +51,7 @@ class CartManagerMongo {
         const cart = await cartModel.findById({ _id: cid });
        const index = cart.products.find((product) => product._id === pid);
 
-       if (index !== -1 && cid !== null && pid !== null) {
+       if ( cid !== null && pid !== null) {
         cart.products.splice(index, 1);
         await cartModel.findByIdAndUpdate({ _id: cid }, cart);
       }

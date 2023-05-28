@@ -17,7 +17,7 @@ class ProductManagerMongo {
   }
   async addProduct(prod) {
     try {
-      const codeCheck = await productsManager.getProducts();
+      const codeCheck = await this.getProducts();
 
       if (codeCheck.find((item) => item.code === prod.code)) {
         return res.send({
@@ -32,9 +32,9 @@ class ProductManagerMongo {
           thumbnail: prod.thumbnail,
           code: prod.code,
           stock: prod.stock,
-          category: prod.category,
+          category: prod.category
         };
-        return await productModel.create(newProduct);
+         await productModel.create(newProduct);
       }
     } catch (error) {
       return new Error(error);

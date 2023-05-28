@@ -5,16 +5,9 @@ const collection = 'messages'
 
 
 const messageSchema = new Schema({
-    user: {
-        type: String,
-        required: true
-    },
+    user: String,
    
-    message: {
-        type: String,
-        required: true,
-        
-    }
+    message: String
 })
 
 

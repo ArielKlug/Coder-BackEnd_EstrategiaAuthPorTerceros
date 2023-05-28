@@ -2,7 +2,7 @@ const socket = io();
 
 socket.on("products", (data) => {
   let ul = document.getElementById("productsList");
- let cantidadProd = data.lenght
+  let cantidadProd = data.lenght;
   data.forEach((prod) => {
     let contenido = document.createElement("li");
     contenido.innerHTML = `
@@ -12,10 +12,8 @@ socket.on("products", (data) => {
     <p>Precio: $${prod.price}</p>
    <p>Stock: ${prod.stock}</p>
      `;
-     if (ul.childElementCount == 0) {
+    if (ul.childElementCount == 0) {
       ul.append(contenido);
-     }
-    
-    
+    }
   });
 });
