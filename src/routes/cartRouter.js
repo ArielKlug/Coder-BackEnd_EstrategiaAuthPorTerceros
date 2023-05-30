@@ -6,17 +6,17 @@ const router = Router();
 
 router.get("/:cid", async (req, res) => {
  try {
-  const { cid } = req.params;
+      const { cid } = req.params;
 
-  const cart = await cartModel.findById(cid).populate('products.product');
+    const cart = await carts.getCart(cid);
 
-  if (!cart) {
-    return res.status(404).json({ error: 'Carrito no encontrado' });
-  }
+    if (!cart) {
+      return res.status(404).json({ error: 'Carrito no encontrado' });
+    }
 
-  
+    const { products } = cart;
 
-  res.render('cart', { cart:  cart.products});
+    res.render('cart', { cart: products });
  
  } catch (error) {
   console.log(error)
