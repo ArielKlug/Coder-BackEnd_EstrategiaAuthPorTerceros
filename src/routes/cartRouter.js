@@ -7,7 +7,17 @@ const router = Router();
 router.get("/:cid", async (req, res) => {
  try {
   const { cid } = req.params;
-  res.send(await carts.getCart(cid));
+
+  const cart = await cartModel.findById(cid).populate('products.product');
+
+  if (!cart) {
+    return res.status(404).json({ error: 'Carrito no encontrado' });
+  }
+
+  
+
+  res.render('cart', { cart:  cart.products});
+ 
  } catch (error) {
   console.log(error)
  } 

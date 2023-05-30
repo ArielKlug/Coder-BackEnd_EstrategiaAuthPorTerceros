@@ -1,4 +1,5 @@
 const {Schema, model} = require('mongoose')
+const mongoosePaginate = require('mongoose-paginate-v2')
 
 
 const collection = 'carts'
@@ -14,10 +15,11 @@ const cartSchema =  new Schema({
     }],
     // userId: String
 })
-
+cartSchema.plugin(mongoosePaginate)
 cartSchema.pre('findOne', function(){
     this.populate('products.product')
 })
+
 
 
 const cartModel = model(collection, cartSchema)

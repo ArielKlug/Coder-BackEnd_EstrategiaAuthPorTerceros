@@ -3,7 +3,7 @@ const { cartModel } = require("../../models/cartModel");
 class CartManagerMongo {
   getCart = async (cid) => {
     try {
-      const cart = await cartModel.findById({ _id: cid });
+      const cart = await cartModel.findOne({ _id: cid });
       return cart;
     } catch (err) {
       console.log(err);

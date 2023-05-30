@@ -9,19 +9,16 @@ router.get("/", async (req, res) => {
   try {
     const limit = parseInt(req.query.limit) || 10;
     const page = parseInt(req.query.page) || 1;
-    const sort = req.query.sort === "desc" ? -1 : 1;
-    const query = req.query.query || "";
+    const sort = req.query.sort === 'desc' ? -1 : 1;
+    const query = req.query.query || '';
 
-    const options = {
-      page: page,
-      limit: limit,
-      sort: { price: sort },
-    };
-    const filter = {
-      category: { $regex: query, $options: "i" },
-    };
-    const products = await productModel.paginate(filter, options);
-
+   
+    const products = await productModel.paginate(
+      {},
+      { limit: limit, page: page, lean: true, sort: {_id: sort, createdAt: 1 },  }
+    );
+    
+    
     const { docs, hasPrevPage, hasNextPage, prevPage, nextPage, totalPages } =
       products;
 
