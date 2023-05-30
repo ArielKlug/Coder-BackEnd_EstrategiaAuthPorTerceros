@@ -1,11 +1,12 @@
 const { Router } = require("express");
-const { messageModel } = require('../models/messagesModel')
-
+const { messageModel } = require('../models/messagesModel');
+const MessagesManagerMongo = require("../managerDaos/mongo/messageManagerMongo");
+const messageManager = new MessagesManagerMongo
 const router = Router()
 
 router.get('/', async (req, res) =>{
     try {
-        let users = await messageModel.find()
+        let users = await messageManager.getMessages
         
         res.status('succes').send(users)
     } catch (error) {
@@ -21,7 +22,7 @@ router.post('/', async(req, res) => {
             user: user.email,
             message: user.message
         }
-        let result = await messageModel.create(newUser)
+        let result = await messageManager.addMessage(newUser)
         
         res.status(200).send({result})
     } catch (error) {

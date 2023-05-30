@@ -1,22 +1,46 @@
 const { Router } = require("express");
 
 const products = require("../managerDaos/mongo/productManagerMongo");
+const { productModel } = require("../models/productModel");
 const productsManager = new products();
 const router = Router();
 
 router.get("/", async (req, res) => {
   try {
-    const { limit } = req.query;
-    const productos = await productsManager.getProducts();
-    if (!limit) {
-      return res.send({
-        status: "success",
-        payload: productos,
+    const limit = parseInt(req.query.limit) || 10;
+    const page = parseInt(req.query.page) || 1;
+    const sort = req.query.sort === "desc" ? -1 : 1;
+    const query = req.query.query || "";
+
+    const options = {
+      page: page,
+      limit: limit,
+      sort: { price: sort },
+    };
+    const filter = {
+      category: { $regex: query, $options: "i" },
+    };
+    const products = await productModel.paginate(filter, options);
+
+    const { docs, hasPrevPage, hasNextPage, prevPage, nextPage, totalPages } =
+      products;
+
+    if (!docs) {
+      res.send({
+        status: "Error",
+        message: "No se encontraron los productos",
       });
     }
-    return res.send({
+    res.render("products", {
       status: "success",
-      payload: productos.slice(0, limit),
+      payload: "Resultado de los productos solicitados",
+      products: docs,
+      hasPrevPage,
+      hasNextPage,
+      prevPage,
+      nextPage,
+      totalPages,
+      limit,
     });
   } catch (error) {
     console.log(error);
@@ -50,14 +74,13 @@ router.post("/", async (req, res) => {
       !prod.thumbnail ||
       !prod.code ||
       !prod.stock ||
-      !prod.category 
+      !prod.category
     ) {
       return res
         .status(400)
         .send({ status: "error", mensaje: "Todos los campos son necesarios" });
     } else {
       await productsManager.addProduct(prod);
-      
     }
 
     res.status(200).send(await productsManager.getProducts());

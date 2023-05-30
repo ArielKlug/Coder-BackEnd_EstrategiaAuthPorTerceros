@@ -10,8 +10,9 @@ const cartSchema =  new Schema({
             type: Schema.Types.ObjectId,
             ref: 'products'
         },
-        
-    }]
+        quantity: Number
+    }],
+    // userId: String
 })
 
 cartSchema.pre('findOne', function(){

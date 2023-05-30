@@ -22,6 +22,7 @@ class CartManagerMongo {
     try {
       await cartModel.create({
         products: [],
+        // userId: 
       });
     } catch (err) {
       console.log(err);
@@ -39,9 +40,9 @@ class CartManagerMongo {
 
 
 
-  deleteCart = async (cid) => {
+  emptyCart = async (cid) => {
     try {
-      await cartModel.deleteOne({ _id: cid });
+      await cartModel.findOneAndUpdate({ _id: cid }, {products: []});
     } catch (error) {
       console.log(error);
     }
@@ -49,6 +50,7 @@ class CartManagerMongo {
   deleteProduct = async (cid, pid) => {
     try {
         const cart = await cartModel.findById({ _id: cid });
+        
        const index = cart.products.find((product) => product._id === pid);
 
        if ( cid !== null && pid !== null) {
@@ -61,6 +63,7 @@ class CartManagerMongo {
         console.log(error)
     }
   }
+  
 }
 
 module.exports = CartManagerMongo;

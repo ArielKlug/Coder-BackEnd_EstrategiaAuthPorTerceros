@@ -1,0 +1,26 @@
+<div>
+  {{#each products}}
+    <li>
+      <p>{{name}}</p>
+      <p>
+        Precio:
+        {{price}}</p>
+      <form action="/carts/{{cartId}}/add" method="POST">
+        <input type="hidden" name="productId" value="{{_id}}" />
+        <button type="submit">Agregar al carrito</button>
+      </form>
+    </li>
+  {{/each}}
+
+  <center>
+    {{#if hasPrevPage}}
+      <a href="/api/products?limit={{limit}}&page={{prevPage}}"><button
+        >anterior</button></a>
+    {{/if}}
+
+    {{#if hasNextPage}}
+      <a href="/api/products?limit={{limit}}&page={{nextPage}}"><button
+        >Siguiente</button></a>
+    {{/if}}
+  </center>
+</div>

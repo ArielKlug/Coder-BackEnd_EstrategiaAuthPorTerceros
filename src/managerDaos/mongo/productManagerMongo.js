@@ -8,6 +8,13 @@ class ProductManagerMongo {
       return new Error(err);
     }
   }
+  async paginate(query, limit, page, sort) {
+    try {
+      
+    } catch (error) {
+      console.log(error)
+    }
+  }
   async getProductById(pid) {
     try {
       return await productModel.findOne({ _id: pid });
