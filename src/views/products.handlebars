@@ -1,20 +1,31 @@
 <div>
-    {{#each products}}
-        <li>
-            <h2>{{this.title}}</h2>
-            <h3>{{this.category}}</h3>
-            <p>{{this.description}}</p>
-            <p>{{this.price}}</p>
-        </li>
-    {{/each}}
+  {{#each products}}
+    <li>
+      <h2>{{this.title}}</h2>
+      <h3>{{this.category}}</h3>
+      <p>{{this.description}}</p>
+      <p>{{this.price}}</p>
 
-    <center>
-        {{#if hasPrevPage}}
-            <a href="/api/products?limit={{limit}}&page={{prevPage}}"><button>anterior</button></a>
-        {{/if}}
+      <form
+        method="post"
+        action="/api/carts/6472dc9a610efe665526321b/products/{{this._id}}"
+      >
+        <button type="submit">Agregar al carrito</button>
+      </form>
+    </li>
+  {{/each}}
 
-        {{#if hasNextPage}}
-            <a href="/api/products?limit={{limit}}&page={{nextPage}}"><button>Siguiente</button></a>
-        {{/if}}
-    </center>
+  <center>
+    {{#if hasPrevPage}}
+      <a href="/api/products?limit={{limit}}&page={{prevPage}}"><button
+        >anterior</button></a>
+    {{/if}}
+
+    {{#if hasNextPage}}
+      <a href="/api/products?limit={{limit}}&page={{nextPage}}"><button
+        >Siguiente</button></a>
+    {{/if}}
+  </center>
 </div>
+
+

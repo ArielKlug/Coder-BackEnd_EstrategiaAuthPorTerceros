@@ -20,7 +20,7 @@ const productSchema = new Schema({
   stock: Number,
   category: { 
     type: String, 
-    Indexed: true },
+    Index: true },
 });
 productSchema.plugin(mongoosePaginate)
 

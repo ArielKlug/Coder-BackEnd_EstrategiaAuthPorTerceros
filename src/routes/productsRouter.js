@@ -5,22 +5,31 @@ const { productModel } = require("../models/productModel");
 const productsManager = new products();
 const router = Router();
 
+
+
+//Éstas son las únicas dos rutas actuales que se pueden filtrar por categoría
+// /api/products?category=camisas
+// /api/products?category=remera
+
 router.get("/", async (req, res) => {
   try {
     const limit = parseInt(req.query.limit) || 10;
     const page = parseInt(req.query.page) || 1;
-    const sort = req.query.sort === 'desc' ? -1 : 1;
-    const query = req.query.query || '';
+    const sort = req.query.sort === "desc" ? -1 : 1;
+    const category = req.query.category || "";
 
-   
-    const products = await productModel.paginate(
-      {},
-      { limit: limit, page: page, lean: true, sort: {_id: sort, createdAt: 1 },  }
+    const productos = await productModel.paginate(
+      { category: { $eq: category } },
+      {
+        limit: limit,
+        page: page,
+        lean: true,
+        sort: { _id: sort, createdAt: 1 },
+      }
     );
-    
-    
+
     const { docs, hasPrevPage, hasNextPage, prevPage, nextPage, totalPages } =
-      products;
+      productos;
 
     if (!docs) {
       res.send({
@@ -28,9 +37,10 @@ router.get("/", async (req, res) => {
         message: "No se encontraron los productos",
       });
     }
+    const payload = `Se encontraron ${docs.length} productos en la página ${page}`;
     res.render("products", {
       status: "success",
-      payload: "Resultado de los productos solicitados",
+      payload: payload,
       products: docs,
       hasPrevPage,
       hasNextPage,
@@ -38,6 +48,7 @@ router.get("/", async (req, res) => {
       nextPage,
       totalPages,
       limit,
+      
     });
   } catch (error) {
     console.log(error);

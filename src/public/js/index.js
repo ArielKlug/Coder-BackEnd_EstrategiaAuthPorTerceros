@@ -1,3 +1,7 @@
+const cartManagerMongo = require("../../managerDaos/mongo/cartManagerMongo")
+const carts = new cartManagerMongo();
+
+
 const socket = io();
 
 socket.on("products", (data) => {
@@ -17,4 +21,6 @@ socket.on("products", (data) => {
     }
   });
 });
+
+
 

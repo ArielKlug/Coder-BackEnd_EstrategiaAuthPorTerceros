@@ -1,9 +1,13 @@
-<h1>Carrito</h1>
-<ul>
-  {{#each cart}}
+
+<div>
+  {{#each newCart}}
     <li>
-      <p>Título: {{this.product.title}}</p>
-      <p>- Precio: {{this.product.price}}</p>
+      <p><span style="color: rgb(255, 0, 0);">{{this.title}}</span></p>
+      <p><span style="color: rgb(255, 0, 0);">Descripción: </span>{{this.description}}</p>
+      <p>
+        <span style="color: rgb(255, 0, 0);">Precio: </span>{{this.price}} 
+      </p>
+    
     </li>
   {{/each}}
-</ul>
+</div>

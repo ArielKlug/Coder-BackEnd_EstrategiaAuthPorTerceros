@@ -2,7 +2,7 @@ const express = require("express");
 const productRouter = require("./routes/productsRouter");
 
 const cartRouter = require("./routes/cartRouter");
-const handleBars = require("express-handlebars");
+const handlebars = require("express-handlebars");
 const viewsRouter = require("./routes/viewsRouter");
 const userRouter = require('./routes/messagesRouter')
 const { Server } = require("socket.io");
@@ -25,7 +25,7 @@ const io = new Server(httpServer);
 
 socketProducts(io)
 
-app.engine("handlebars", handleBars.engine());
+app.engine("handlebars", handlebars.engine());
 app.set("views", __dirname + "/views");
 app.set("view engine", "handlebars");
 
