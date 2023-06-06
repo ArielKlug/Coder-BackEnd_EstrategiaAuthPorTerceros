@@ -5,8 +5,6 @@ const { productModel } = require("../models/productModel");
 const productsManager = new products();
 const router = Router();
 
-
-
 //Éstas son las únicas dos rutas actuales que se pueden filtrar por categoría
 // /api/products?category=camisas
 // /api/products?category=remera
@@ -18,15 +16,28 @@ router.get("/", async (req, res) => {
     const sort = req.query.sort === "desc" ? -1 : 1;
     const category = req.query.category || "";
 
-    const productos = await productModel.paginate(
-      { category: { $eq: category } },
-      {
-        limit: limit,
-        page: page,
-        lean: true,
-        sort: { _id: sort, createdAt: 1 },
-      }
-    );
+    let productos;
+    if (category === "") {
+      productos = await productModel.paginate(
+        {},
+        {
+          limit: limit,
+          page: page,
+          lean: true,
+          sort: { _id: sort, createdAt: 1 },
+        }
+      );
+    } else {
+      productos = await productModel.paginate(
+        { category: { $eq: category } },
+        {
+          limit: limit,
+          page: page,
+          lean: true,
+          sort: { _id: sort, createdAt: 1 },
+        }
+      );
+    }
 
     const { docs, hasPrevPage, hasNextPage, prevPage, nextPage, totalPages } =
       productos;
@@ -48,12 +59,14 @@ router.get("/", async (req, res) => {
       nextPage,
       totalPages,
       limit,
-      
     });
   } catch (error) {
     console.log(error);
   }
 });
+
+//ID de algunos productos de la DB : 6472dbd06e17547c73e2a872, 647426de34ee0a57cc1b3c8f, 647426e934ee0a57cc1b3c97 ,
+//6472dae2319d717aed29367e, 6472db04319d717aed293686
 
 router.get("/:pid", async (req, res) => {
   try {

@@ -1,4 +1,6 @@
 const express = require("express");
+const cookieParser = require("cookie-parser") 
+
 const productRouter = require("./routes/productsRouter");
 
 const cartRouter = require("./routes/cartRouter");
@@ -7,7 +9,7 @@ const viewsRouter = require("./routes/viewsRouter");
 const userRouter = require('./routes/messagesRouter')
 const { Server } = require("socket.io");
 const { socketProducts } = require("./utils/socketProducts");
-
+const cookiePrueba = require('./routes/cookiePruebaRouter')
 
 const dataBase = require('./config/objectConfig.js')
 
@@ -29,9 +31,14 @@ app.engine("handlebars", handlebars.engine());
 app.set("views", __dirname + "/views");
 app.set("view engine", "handlebars");
 
+app.use(cookieParser('P@l@vra'))
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use("/static", express.static(__dirname + "/public"));
+
+app.use("/cookies", cookiePrueba)
+
+
 app.use("/", viewsRouter);
 
 app.use('/users', userRouter)
