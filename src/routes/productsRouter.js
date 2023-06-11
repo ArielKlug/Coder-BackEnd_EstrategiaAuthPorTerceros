@@ -41,6 +41,39 @@ router.get("/", async (req, res) => {
 
     const { docs, hasPrevPage, hasNextPage, prevPage, nextPage, totalPages } =
       productos;
+      const payload = `Se encontraron ${docs.length} productos en la página ${page}`;
+      if (req.session.user) {
+        const { first_name, last_name, role } = req.session.user;
+       return res.render("products", {
+          status: "success",
+          payload: payload,
+          products: docs,
+          hasPrevPage,
+          hasNextPage,
+          prevPage,
+          nextPage,
+          totalPages,
+          limit,
+          first_name,
+          last_name,
+          role,
+        });
+      }else {
+        
+        res.render("products", {
+          status: "success",
+          payload: payload,
+          products: docs,
+          hasPrevPage,
+          hasNextPage,
+          prevPage,
+          nextPage,
+          totalPages,
+          limit,
+          
+        });
+      }
+    
 
     if (!docs) {
       res.send({
@@ -48,18 +81,7 @@ router.get("/", async (req, res) => {
         message: "No se encontraron los productos",
       });
     }
-    const payload = `Se encontraron ${docs.length} productos en la página ${page}`;
-    res.render("products", {
-      status: "success",
-      payload: payload,
-      products: docs,
-      hasPrevPage,
-      hasNextPage,
-      prevPage,
-      nextPage,
-      totalPages,
-      limit,
-    });
+   
   } catch (error) {
     console.log(error);
   }

@@ -1,4 +1,5 @@
 const { Router } = require("express");
+const { auth } = require("../middlewares/auntenticationMiddleware");
 const router = Router();
 
 router.get("/setCookie", (req, res) => {
@@ -25,5 +26,11 @@ router.get("/setSignedCookie", (req, res) => {
 router.get("/getSignedCookie", (req, res) => {
   res.send(req.signedCookies);
 });
+
+
+
+
+
+
 
 module.exports = router;
