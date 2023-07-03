@@ -24,4 +24,9 @@ router.get("/", (req, res) => {
     style: "index.css",
   });
 });
+router.get ('/views/passRestore', (req, res) =>{
+  res.render('passRestore', {
+    style: "index.css"
+  })
+})
 module.exports = router;

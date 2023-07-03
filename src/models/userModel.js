@@ -3,10 +3,7 @@ const mongoosePaginate = require("mongoose-paginate-v2");
 
 const collection = "usuarios";
 const userSchema = new Schema({
-  username: {
-    type: String,
-    unique: true,
-  },
+ 
   first_name: {
     type: String,
     index: true,
