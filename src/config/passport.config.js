@@ -86,11 +86,11 @@ const initPassportGithub = () => {
         callbackURL: "http://localhost:8080/api/session/githubcallback",
       },
       async (accessToken, refreshToken, profile, done) => {
-        
+        console.log(profile)
         try {
           let user = await userManager.findUser({ email: profile._json.email });
           if (user) {
-            return done(null, false);
+            return done(null, user);
           }
 
           if (!user) {
